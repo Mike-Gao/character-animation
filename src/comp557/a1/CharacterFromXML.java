@@ -83,18 +83,13 @@ public class CharacterFromXML {
 			// position is optional (ignored if missing) but should probably be a required attribute!​‌​​​‌‌​​​‌‌​​​‌​​‌‌‌​​‌
 			// Could add optional attributes for limits (to all joints)
 
-//			SphericalJoint joint = new SphericalJoint( name );
-//			if ( (t=getTuple3dAttr(dataNode,"position")) != null ) joint.setPosition( t );			
-//			return joint;
+			return new SphericalJoint(name, getTuple3dAttr(dataNode, "position"));
 			
 		} else if ( type.equals("rotary") ) {
 			// position and axis are required... passing null to set methods
 			// likely to cause an execption (perhaps OK)
 			
-//			Hinge joint = new Hinge( name );
-//			joint.setPosition( getTuple3dAttr(dataNode,"position") );
-//			joint.setAxis( getTuple3dAttr(dataNode,"axis") );
-//			return joint;
+			return new RotaryJoint(name, getTuple3dAttr(dataNode,"axis"), getTuple3dAttr(dataNode, "position"));
 			
 		} else {
 			System.err.println("Unknown type " + type );

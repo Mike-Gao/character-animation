@@ -6,7 +6,7 @@ import mintools.parameters.BooleanParameter;
 
 public class CharacterMaker {
 
-	static public String name = "CHARACTER NAME - YOUR NAME AND STUDENT NUMBER";
+	static public String name = "/dev/null - Mike Gao AND 260915701";
 	
 	// TODO: Objective 8: change default of load from file to true once you start working with xml
 	static BooleanParameter loadFromFile = new BooleanParameter( "Load from file (otherwise by procedure)", false );

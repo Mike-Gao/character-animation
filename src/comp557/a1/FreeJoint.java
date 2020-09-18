@@ -28,7 +28,10 @@ public class FreeJoint extends GraphNode {
 		pipeline.push();
 		
 		// TODO: Objective 3: Freejoint, transformations must be applied before drawing children
-		
+		pipeline.translate(tx.getValue(), ty.getValue(), tz.getValue());
+		pipeline.rotate(rx.getValue(), 1, 0, 0);
+		pipeline.rotate(ry.getValue(), 0, 1, 0);
+		pipeline.rotate(rz.getValue(), 0, 0, 1);
 		super.display( drawable, pipeline );		
 		pipeline.pop();
 	}
