@@ -75,7 +75,6 @@ public class CharacterFromXML {
 	public static GraphNode createJoint( Node dataNode ) {
 		String type = dataNode.getAttributes().getNamedItem("type").getNodeValue();
 		String name = dataNode.getAttributes().getNamedItem("name").getNodeValue();
-		Tuple3d t;
 		if ( type.equals("free") ) {
 			FreeJoint joint = new FreeJoint( name );
 			return joint;
@@ -83,14 +82,13 @@ public class CharacterFromXML {
 			// position is optional (ignored if missing) but should probably be a required attribute!​‌​​​‌‌​​​‌‌​​​‌​​‌‌‌​​‌
 			// Could add optional attributes for limits (to all joints)
 
-			return new SphericalJoint(name, getTuple3dAttr(dataNode, "position"));
+
 			
 		} else if ( type.equals("rotary") ) {
 			// position and axis are required... passing null to set methods
 			// likely to cause an execption (perhaps OK)
 			
-			return new RotaryJoint(name, getTuple3dAttr(dataNode,"axis"), getTuple3dAttr(dataNode, "position"));
-			
+
 		} else {
 			System.err.println("Unknown type " + type );
 		}

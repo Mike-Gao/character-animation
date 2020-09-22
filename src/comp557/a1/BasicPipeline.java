@@ -9,10 +9,13 @@ import javax.vecmath.Vector4f;
 import com.jogamp.opengl.GL4;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLException;
+import com.jogamp.opengl.math.Matrix4;
 import com.jogamp.opengl.util.glsl.ShaderCode;
 import com.jogamp.opengl.util.glsl.ShaderProgram;
 
 import mintools.viewer.FontTexture;
+
+import java.util.Stack;
 
 /**
  * Basic GLSL transformation and lighting pipeline, along with a matrix stack
@@ -39,7 +42,8 @@ public class BasicPipeline {
     public int normalAttributeID;
     
     /** TODO: Objective 1: add a matrix stack to the basic pipeline */    
-   
+   	private Stack<Matrix4d> matrixStack = new Stack<Matrix4d>();
+
 	/** TODO: Objective 1: Modeling matrix, make sure this is always the matrix at the top of the stack */
     private Matrix4d MMatrix = new Matrix4d();
     /** Inverse Transpose of Modeling matrix */
@@ -107,7 +111,8 @@ public class BasicPipeline {
 	 */
 	public void push() {
 		// TODO: Objective 1: stack push
-		throw new RuntimeErrorException( new Error("stack overflow") );
+		matrixStack.push(new Matrix4d(MMatrix));
+		matrixStack.push(new Matrix4d(MinvTMatrix));
 	}
 
 	/** 
@@ -117,7 +122,8 @@ public class BasicPipeline {
 	 */
 	public void pop() {
 		// TODO: Objective 1: stack pop
-		throw new RuntimeErrorException( new Error("stack underflow") );
+		MinvTMatrix = matrixStack.pop();
+		MMatrix = matrixStack.pop();
 	}
 	
 	private Matrix4d tmpMatrix4d = new Matrix4d();
