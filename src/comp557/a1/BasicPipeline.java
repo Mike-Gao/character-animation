@@ -43,7 +43,7 @@ public class BasicPipeline {
     
     /** TODO: Objective 1: add a matrix stack to the basic pipeline */    
    	private Stack<Matrix4d> matrixStack = new Stack<Matrix4d>();
-
+	private Matrix4d tmpMatrix4d = new Matrix4d();
 	/** TODO: Objective 1: Modeling matrix, make sure this is always the matrix at the top of the stack */
     private Matrix4d MMatrix = new Matrix4d();
     /** Inverse Transpose of Modeling matrix */
@@ -93,7 +93,7 @@ public class BasicPipeline {
         glUniformMatrix( gl, MinvTMatrixID, MinvTMatrix );
 
         // TODO: Objective 7: GLSL lighting, you may want to provide 
-        Vector3f lightDir = new Vector3f( 1, 1, 1 );
+        Vector3f lightDir = new Vector3f( 1, 0, 1 );
         lightDir.normalize();
         gl.glUniform3f( lightDirID, lightDir.x, lightDir.y, lightDir.z );
 	}
@@ -126,8 +126,6 @@ public class BasicPipeline {
 		MMatrix = matrixStack.pop();
 	}
 	
-	private Matrix4d tmpMatrix4d = new Matrix4d();
-	
 	/**
 	 * Applies a translation to the current modeling matrix.
 	 * Note: setModelingMatrixUniform must be called before drawing!
@@ -137,6 +135,14 @@ public class BasicPipeline {
 	 */
 	public void translate( double x, double y, double z ) {
 		// TODO: Objective 2: translate
+		tmpMatrix4d.setIdentity();
+		tmpMatrix4d.m03 = x;
+		tmpMatrix4d.m13 = y;
+		tmpMatrix4d.m23 = z;
+		MMatrix.mul(tmpMatrix4d);
+		tmpMatrix4d.transpose();
+		tmpMatrix4d.invert();
+		MinvTMatrix.mul(tmpMatrix4d);
 	}
 
 	/**
@@ -148,6 +154,14 @@ public class BasicPipeline {
 	 */
 	public void scale( double x, double y, double z ) {
 		// TODO: Objective 2: scale
+		tmpMatrix4d.setIdentity();
+		tmpMatrix4d.m00 = x;
+		tmpMatrix4d.m11 = y;
+		tmpMatrix4d.m22 = z;
+		MMatrix.mul(tmpMatrix4d);
+		tmpMatrix4d.transpose();
+		tmpMatrix4d.invert();
+		MinvTMatrix.mul(tmpMatrix4d);
 	}
 	
 	/**
