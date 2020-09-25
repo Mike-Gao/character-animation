@@ -34,10 +34,13 @@ public class BasicPipeline {
     /** TODO: Objective 7: material properties, minimally kd is set up, but add more as necessary */
     /** You will want to use this with a glUniform3f call to set the r g b reflectance properties, each being between 0 and 1 */
     public int kdID;
+    public int fieldLightDirID;
+    public int keyLightDirID;
+    public int backLightDirID;
     
     /** TODO: Objective 8: lighting direction, minimally one direction is setup , but add more as necessary */
     public int lightDirID;
-    
+
     public int positionAttributeID;
     public int normalAttributeID;
     
@@ -73,6 +76,11 @@ public class BasicPipeline {
         PMatrixID = gl.glGetUniformLocation( glslProgramID, "P" );
         kdID = gl.glGetUniformLocation( glslProgramID, "kd" );
         lightDirID = gl.glGetUniformLocation( glslProgramID, "lightDir" );
+        // Three light
+		fieldLightDirID = gl.glGetUniformLocation(glslProgramID, "fieldLightDir");
+		backLightDirID = gl.glGetUniformLocation(glslProgramID, "backLightDir");
+		keyLightDirID = gl.glGetUniformLocation(glslProgramID, "keyLightDir");
+		// End
         positionAttributeID = gl.glGetAttribLocation( glslProgramID, "position" );
         normalAttributeID = gl.glGetAttribLocation( glslProgramID, "normal" );
 	}
@@ -93,10 +101,15 @@ public class BasicPipeline {
         glUniformMatrix( gl, MinvTMatrixID, MinvTMatrix );
 
         // TODO: Objective 7: GLSL lighting, you may want to provide 
-        Vector3f lightDir = new Vector3f( 1, 1, 1 );
+        Vector3f lightDir = new Vector3f(0.5f, 0.1f, 0.866f);
         lightDir.normalize();
-        gl.glUniform3f( lightDirID, lightDir.x, lightDir.y, lightDir.z );
-        //gl.glUniform3f(kdID, color,color,color);
+        gl.glUniform3f(fieldLightDirID, lightDir.x, lightDir.y, lightDir.z);
+        lightDir = new Vector3f(-0.5f, 0.1f, 0.866f);
+        lightDir.normalize();
+        gl.glUniform3f(keyLightDirID, lightDir.x, lightDir.y, lightDir.z);
+        lightDir = new Vector3f(0.5f, 0.1f, -0.866f);
+		lightDir.normalize();
+		gl.glUniform3f(backLightDirID, lightDir.x, lightDir.y, lightDir.z);
 	}
 	
 	/** Sets the modeling matrix with the current top of the stack */
