@@ -81,8 +81,6 @@ public class CharacterFromXML {
 		} else if ( type.equals("spherical") ) {
 			// position is optional (ignored if missing) but should probably be a required attribute!​‌​​​‌‌​​​‌‌​​​‌​​‌‌‌​​‌
 			// Could add optional attributes for limits (to all joints)
-
-
 			
 		} else if ( type.equals("rotary") ) {
 			// position and axis are required... passing null to set methods

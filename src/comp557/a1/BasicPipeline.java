@@ -42,7 +42,7 @@ public class BasicPipeline {
     public int normalAttributeID;
     
     /** TODO: Objective 1: add a matrix stack to the basic pipeline */    
-   	private Stack<Matrix4d> matrixStack = new Stack<Matrix4d>();
+   	private Stack<Matrix4d> matrixStack = new Stack<>();
 	private Matrix4d tmpMatrix4d = new Matrix4d();
 	/** TODO: Objective 1: Modeling matrix, make sure this is always the matrix at the top of the stack */
     private Matrix4d MMatrix = new Matrix4d();
@@ -93,9 +93,10 @@ public class BasicPipeline {
         glUniformMatrix( gl, MinvTMatrixID, MinvTMatrix );
 
         // TODO: Objective 7: GLSL lighting, you may want to provide 
-        Vector3f lightDir = new Vector3f( 1, 0, 1 );
+        Vector3f lightDir = new Vector3f( 1, 1, 1 );
         lightDir.normalize();
         gl.glUniform3f( lightDirID, lightDir.x, lightDir.y, lightDir.z );
+        //gl.glUniform3f(kdID, color,color,color);
 	}
 	
 	/** Sets the modeling matrix with the current top of the stack */
