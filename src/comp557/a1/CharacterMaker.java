@@ -33,12 +33,15 @@ public class CharacterMaker {
 			// some code to create a test or partial character and return the root node.
 
 			FreeJoint root = new FreeJoint("test");
-			root.add(new RotaryJoint("ap", null, null, null, 2.0, 2.0, 0.0));
-			var sp = new SphericalJoint("sph", -2.0, 2.0, 0.0);
+			var rot = new RotaryJoint("RotaryJoint", null, null, null, 2.0, 2.0, 0.0);
+			root.add(rot);
+			var sp = new SphericalJoint("SphericalJoint", -2.0, 2.0, 0.0);
 			root.add(sp);
-			var cube = new Geometry("cube1", null, null, new Vector3d(0,0,0), new Vector3f(0f, 0.5f, 1f));
-			sp.add(cube);
-			return new FreeJoint("test");
+			var cube = new Geometry("Cube", "box", null, null, new Vector3d(0,0,0), new Vector3f(0f, 0.5f, 1f));
+			var sphere = new Geometry("Sphere", "spherical", new Vector3d(2.0, 2.0, 0.0), null, new Vector3d(0, 0, 0), new Vector3f(0f, 0.5f, 1f));
+			rot.add(cube);
+			sp.add(sphere);
+			return root;
 		}
 	}
 }

@@ -10,7 +10,6 @@ public class SphericalJoint extends GraphNode {
     private Double tx,ty,tz;
     public SphericalJoint(String name, Double tx, Double ty, Double tz) {
         super(name);
-        System.out.println("asd");
         dofs.add(rx = new DoubleParameter("x", 0, -180,180) );
         dofs.add(ry = new DoubleParameter("y", 0, -180, 180));
         dofs.add(rz = new DoubleParameter("z", 0, -180, 180));

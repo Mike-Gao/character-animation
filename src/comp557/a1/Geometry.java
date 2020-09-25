@@ -3,6 +3,7 @@ package comp557.a1;
 import com.jogamp.opengl.GL4;
 import com.jogamp.opengl.GLAutoDrawable;
 import comp557.a1.geom.Cube;
+import comp557.a1.geom.Quad;
 import comp557.a1.geom.Sphere;
 import mintools.parameters.DoubleParameter;
 
@@ -13,12 +14,13 @@ public class Geometry extends GraphNode {
     Vector3d position, rotation, scaling;
     Vector3f color;
     String type;
-    public Geometry(String name, Vector3d position, Vector3d rotation, Vector3d scaling, Vector3f color) {
+    public Geometry(String name, String type, Vector3d position, Vector3d rotation, Vector3d scaling, Vector3f color) {
         super(name);
         this.position = position;
         this.color = color;
         this.scaling = scaling;
         this.rotation = rotation;
+        this.type = type;
         if (position==null)
             this.position = new Vector3d(0,0,0);
         if (color==null)
@@ -34,10 +36,12 @@ public class Geometry extends GraphNode {
         GL4 gl = drawable.getGL().getGL4();
         gl.glUniform3f(pipeline.kdID, this.color.x, this.color.y, this.color.z);
         // TODO: Objective 3: Freejoint, transformations must be applied before drawing children
-        if (type.equals("cube")) {
+        if (type.equals("box")) {
             Cube.draw(drawable, pipeline);
-        } else if (type.equals("sphere")) {
+        } else if (type.equals("spherical")) {
             Sphere.draw(drawable, pipeline);
+        } else if (type.equals("quad")) {
+            Quad.draw(drawable, pipeline);
         }
         pipeline.translate(position.x, position.y, position.z);
         pipeline.rotate(Math.toRadians(rotation.x), 1, 0, 0);

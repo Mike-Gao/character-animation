@@ -9,6 +9,9 @@ public class RotaryJoint extends GraphNode {
     public RotaryJoint(String name, Double x, Double y, Double z, Double tx, Double ty, Double tz) {
         super(name);
         dofs.add(angle = new DoubleParameter("angle", 0, -180, 180));
+        this.rx = x;
+        this.ry = y;
+        this.rz = z;
         if (x == null) {
             this.rx = 0.0;
         }
@@ -16,11 +19,8 @@ public class RotaryJoint extends GraphNode {
             this.ry = 0.0;
         }
         if (z == null) {
-            this.ry = 1.0;
+            this.rz = 1.0;
         }
-        this.rx = x;
-        this.ry = y;
-        this.rz = z;
         this.tx = tx;
         this.ty = ty;
         this.tz = tz;
