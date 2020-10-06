@@ -118,7 +118,7 @@ public class BasicPipeline {
 		viewDir.normalize();
 		gl.glUniform3f(viewDirID, viewDir.x, viewDir.y, viewDir.z);
         lightDir.normalize();
-		gl.glUniform3f(kdID, 0, 0, 0);
+//		gl.glUniform3f(kdID, 0, 0, 0);
 		gl.glUniform3f(ksID, 0.9f, 0.9f, 0.9f);
 		gl.glUniform1f(shininessID, 1);
         gl.glUniform3f(fillLightDirID, lightDir.x, lightDir.y, lightDir.z);

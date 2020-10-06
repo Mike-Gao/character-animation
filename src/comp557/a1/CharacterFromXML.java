@@ -156,10 +156,11 @@ public class CharacterFromXML {
 				rotation = new Vector3d(0,0,0);
 			}
 			Geometry geom = new Geometry(name, type, t, rotation, scale, color, shininess);
+			return geom;
 		} else {
 			System.err.println("unknown type " + type );
 		}
-		return null;		
+		return null;
 	}
 
 	/**
@@ -173,7 +174,7 @@ public class CharacterFromXML {
 		Vector3f tuple = null;
 		if ( attr != null ) {
 			Scanner s = new Scanner( attr.getNodeValue() );
-			tuple = new Vector3f( s.nextFloat(), s.nextFloat(), s.nextFloat() );
+			tuple = new Vector3f( s.nextFloat()/255, s.nextFloat()/255, s.nextFloat()/255 );
 			s.close();
 		}
 		return tuple;
@@ -190,7 +191,7 @@ public class CharacterFromXML {
 		Vector3d tuple = null;
 		if ( attr != null ) {
 			Scanner s = new Scanner( attr.getNodeValue() );
-			tuple = new Vector3d( s.nextDouble(), s.nextDouble(), s.nextDouble() );			
+			tuple = new Vector3d( s.nextDouble(), s.nextDouble(), s.nextDouble() );
 			s.close();
 		}
 		return tuple;

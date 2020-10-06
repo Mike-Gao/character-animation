@@ -24,6 +24,7 @@ public class Geometry extends GraphNode {
         this.scaling = scaling;
         this.rotation = rotation;
         this.type = type;
+        this.shininess = shininess;
         if (position==null)
             this.position = new Vector3d(0,0,0);
         if (color==null)
@@ -37,17 +38,20 @@ public class Geometry extends GraphNode {
     public void display(GLAutoDrawable drawable, BasicPipeline pipeline ) {
         pipeline.push();
         GL4 gl = drawable.getGL().getGL4();
-        pipeline.setGlKd(gl, (float) color.x, (float) color.y, (float) color.z);
+        pipeline.setGlKd(gl, color.x, color.y, color.z);
         pipeline.setGlShininess(gl, shininess);
         // TODO: Objective 3: Freejoint, transformations must be applied before drawing children
+
+        pipeline.translate(position.x, position.y, position.z);
+        pipeline.scale(scaling.x, scaling.y, scaling.z);
         if (type.equals("box")) {
             Cube.draw(drawable, pipeline);
-        } else if (type.equals("spherical")) {
+        } else if (type.equals("sphere")) {
             Sphere.draw(drawable, pipeline);
         } else if (type.equals("quad")) {
             Quad.draw(drawable, pipeline);
         }
-        pipeline.translate(position.x, position.y, position.z);
+
         pipeline.rotate(Math.toRadians(rotation.x), 1, 0, 0);
         pipeline.rotate(Math.toRadians(rotation.y), 0, 1, 0);
         pipeline.rotate(Math.toRadians(rotation.z), 0, 0, 1);

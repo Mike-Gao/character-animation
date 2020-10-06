@@ -37,8 +37,8 @@ public class CharacterMaker {
 			root.add(rot);
 			var sp = new SphericalJoint("SphericalJoint", -2.0, 2.0, 0.0, 0.0, 180.0, 0.0, 180.0, 0.0, 180.0);
 			root.add(sp);
-			var cube = new Geometry("Cube", "box", null, null, new Vector3d(0,0,0), new Vector3f(0f, 0.5f, 1f), 1f);
-			var sphere = new Geometry("Sphere", "spherical", new Vector3d(2.0, 2.0, 0.0), null, new Vector3d(0, 0, 0), new Vector3f(0f, 0.5f, 1f), 1f);
+			var cube = new Geometry("Cube", "box", null, null, null, new Vector3f(0f, 0.5f, 1f), 1f);
+			var sphere = new Geometry("Sphere", "spherical", new Vector3d(2.0, 2.0, 0.0), null, null, new Vector3f(0f, 0.5f, 1f), 1f);
 			rot.add(cube);
 			sp.add(sphere);
 			return root;
