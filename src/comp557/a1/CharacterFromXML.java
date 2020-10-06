@@ -111,9 +111,14 @@ public class CharacterFromXML {
 			if (pos == null) {
 				pos = new Vector3d(0,0,0);
 			}
-			pos = getTuple3dAttr(dataNode, "position");
 			axis = getTuple3dAttr(dataNode, "axis");
+			if (axis == null) {
+				axis = new Vector3d(0,0,1);
+			}
 			angRange = getTuple2dAttr(dataNode, "range");
+			if (angRange == null) {
+				angRange = new Vector2d(-180,180);
+			}
 			RotaryJoint jnt = new RotaryJoint(name, pos.x, pos.y, pos.z, axis.x, axis.y, axis.z, angRange.x, angRange.y);
 			return jnt;
 		} else {
