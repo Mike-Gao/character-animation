@@ -7,15 +7,17 @@ import comp557.a1.geom.Quad;
 import comp557.a1.geom.Sphere;
 import mintools.parameters.DoubleParameter;
 
+import javax.vecmath.Tuple3d;
+import javax.vecmath.Tuple3f;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
 public class Geometry extends GraphNode {
-    Vector3d position, rotation, scaling;
-    Vector3f color;
+    Tuple3d position, rotation, scaling;
+    Tuple3f color;
     String type;
     float shininess = 1f;
-    public Geometry(String name, String type, Vector3d position, Vector3d rotation, Vector3d scaling, Vector3f color) {
+    public Geometry(String name, String type, Tuple3d position, Tuple3d rotation, Tuple3d scaling, Tuple3f color, float shininess) {
         super(name);
         this.position = position;
         this.color = color;

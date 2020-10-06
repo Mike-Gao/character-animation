@@ -5,10 +5,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Scanner;
 
-import javax.vecmath.Tuple2d;
-import javax.vecmath.Tuple3d;
-import javax.vecmath.Vector2d;
-import javax.vecmath.Vector3d;
+import javax.vecmath.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -17,7 +14,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * Loads an articulated character hierarchy from an XML file. 
+ * Loads an articulated character hierarchy from an XML file.
+ * /home/gao/IdeaProjects/character-animation/data/a1data/character
  */
 public class CharacterFromXML {
 
@@ -30,6 +28,7 @@ public class CharacterFromXML {
 			return createScene( null, document.getDocumentElement() ); // we don't check the name of the document elemnet
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.out.println(filename);
 			throw new RuntimeException("Failed to load simulation input file.", e);
 		}
 	}
@@ -80,7 +79,7 @@ public class CharacterFromXML {
 		Tuple3d pos, axis;
 		Tuple2d xRange,yRange,zRange;
 		Tuple2d angRange;
-		if ( type.equals("free") ) {
+		if ( type.equals("freejoint") ) {
 			FreeJoint joint = new FreeJoint( name );
 			return joint;
 		} else if ( type.equals("spherical") ) {
@@ -91,8 +90,18 @@ public class CharacterFromXML {
 				pos = new Vector3d(0,0,0);
 			}
 			xRange = getTuple2dAttr(dataNode,"xrange");
+			if (xRange == null) {
+				xRange = new Vector2d(0,180);
+			}
+
 			yRange = getTuple2dAttr(dataNode,"yrange");
+			if (yRange == null) {
+				yRange = new Vector2d(0,180);
+			}
 			zRange = getTuple2dAttr(dataNode,"zrange");
+			if (zRange == null) {
+				zRange = new Vector2d(0,180);
+			}
 			SphericalJoint jnt = new SphericalJoint(name, pos.x, pos.y, pos.z, xRange.x, xRange.y, yRange.x, yRange.y, zRange.x, zRange.y);
 			return jnt;
 		} else if ( type.equals("rotary") ) {
@@ -121,8 +130,9 @@ public class CharacterFromXML {
 	public static GraphNode createGeom( Node dataNode ) {
 		String type = dataNode.getAttributes().getNamedItem("type").getNodeValue();
 		String name = dataNode.getAttributes().getNamedItem("name").getNodeValue();
-		Tuple3d t;
-		Tuple3d scale;
+		Tuple3d t, scale, rotation;
+		Tuple3f color;
+		float shininess = 1;
 		if ( type != null) {
 			t = getTuple3dAttr(dataNode, "center");
 			if (t == null) {
@@ -132,10 +142,36 @@ public class CharacterFromXML {
 			if (scale == null) {
 				scale = new Vector3d(1,1,1);
 			}
+			color = getTuple3fAttr(dataNode, "color");
+			if (color == null) {
+				color = new Vector3f(1,1,1);
+			}
+			rotation = getTuple3dAttr(dataNode, "rotation");
+			if (rotation == null) {
+				rotation = new Vector3d(0,0,0);
+			}
+			Geometry geom = new Geometry(name, type, t, rotation, scale, color, shininess);
 		} else {
 			System.err.println("unknown type " + type );
 		}
 		return null;		
+	}
+
+	/**
+	 * Loads tuple3f attributes of the given name from the given node.
+	 * @param dataNode
+	 * @param attrName
+	 * @return null if attribute not present
+	 */
+	public static Tuple3f getTuple3fAttr( Node dataNode, String attrName ) {
+		Node attr = dataNode.getAttributes().getNamedItem( attrName);
+		Vector3f tuple = null;
+		if ( attr != null ) {
+			Scanner s = new Scanner( attr.getNodeValue() );
+			tuple = new Vector3f( s.nextFloat(), s.nextFloat(), s.nextFloat() );
+			s.close();
+		}
+		return tuple;
 	}
 	
 	/**
