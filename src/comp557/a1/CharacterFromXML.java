@@ -5,7 +5,9 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Scanner;
 
+import javax.vecmath.Tuple2d;
 import javax.vecmath.Tuple3d;
+import javax.vecmath.Vector2d;
 import javax.vecmath.Vector3d;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -75,18 +77,36 @@ public class CharacterFromXML {
 	public static GraphNode createJoint( Node dataNode ) {
 		String type = dataNode.getAttributes().getNamedItem("type").getNodeValue();
 		String name = dataNode.getAttributes().getNamedItem("name").getNodeValue();
+		Tuple3d pos, axis;
+		Tuple2d xRange,yRange,zRange;
+		Tuple2d angRange;
 		if ( type.equals("free") ) {
 			FreeJoint joint = new FreeJoint( name );
 			return joint;
 		} else if ( type.equals("spherical") ) {
 			// position is optional (ignored if missing) but should probably be a required attribute!​‌​​​‌‌​​​‌‌​​​‌​​‌‌‌​​‌
 			// Could add optional attributes for limits (to all joints)
-			
+			pos = getTuple3dAttr(dataNode, "position");
+			if (pos == null) {
+				pos = new Vector3d(0,0,0);
+			}
+			xRange = getTuple2dAttr(dataNode,"xrange");
+			yRange = getTuple2dAttr(dataNode,"yrange");
+			zRange = getTuple2dAttr(dataNode,"zrange");
+			SphericalJoint jnt = new SphericalJoint(name, pos.x, pos.y, pos.z, xRange.x, xRange.y, yRange.x, yRange.y, zRange.x, zRange.y);
+			return jnt;
 		} else if ( type.equals("rotary") ) {
 			// position and axis are required... passing null to set methods
 			// likely to cause an execption (perhaps OK)
-			
-
+			pos = getTuple3dAttr(dataNode, "position");
+			if (pos == null) {
+				pos = new Vector3d(0,0,0);
+			}
+			pos = getTuple3dAttr(dataNode, "position");
+			axis = getTuple3dAttr(dataNode, "axis");
+			angRange = getTuple2dAttr(dataNode, "range");
+			RotaryJoint jnt = new RotaryJoint(name, pos.x, pos.y, pos.z, axis.x, axis.y, axis.z, angRange.x, angRange.y);
+			return jnt;
 		} else {
 			System.err.println("Unknown type " + type );
 		}
@@ -102,18 +122,16 @@ public class CharacterFromXML {
 		String type = dataNode.getAttributes().getNamedItem("type").getNodeValue();
 		String name = dataNode.getAttributes().getNamedItem("name").getNodeValue();
 		Tuple3d t;
-		if ( type.equals("box" ) ) {
-//			BodyBox geom = new BodyBox( name );
-//			if ( (t=getTuple3dAttr(dataNode,"center")) != null ) geom.setCentre( t );
-//			if ( (t=getTuple3dAttr(dataNode,"scale")) != null ) geom.setScale( t );
-//			if ( (t=getTuple3dAttr(dataNode,"color")) != null ) geom.setColor( t );
-//			return geom;
-		} else if ( type.equals( "sphere" )) {
-//			BodySphere geom = new BodySphere( name );				
-//			if ( (t=getTuple3dAttr(dataNode,"center")) != null ) geom.setCentre( t );
-//			if ( (t=getTuple3dAttr(dataNode,"scale")) != null ) geom.setScale( t );
-//			if ( (t=getTuple3dAttr(dataNode,"color")) != null ) geom.setColor( t );
-//			return geom;	
+		Tuple3d scale;
+		if ( type != null) {
+			t = getTuple3dAttr(dataNode, "center");
+			if (t == null) {
+				t = new Vector3d(0,0,0);
+			}
+			scale = getTuple3dAttr(dataNode, "scale");
+			if (scale == null) {
+				scale = new Vector3d(1,1,1);
+			}
 		} else {
 			System.err.println("unknown type " + type );
 		}
@@ -132,6 +150,23 @@ public class CharacterFromXML {
 		if ( attr != null ) {
 			Scanner s = new Scanner( attr.getNodeValue() );
 			tuple = new Vector3d( s.nextDouble(), s.nextDouble(), s.nextDouble() );			
+			s.close();
+		}
+		return tuple;
+	}
+
+	/**
+	 * Loads tuple2d attributes of the given name from the given node.
+	 * @param dataNode
+	 * @param attrName
+	 * @return null if attribute not present
+	 */
+	public static Tuple2d getTuple2dAttr( Node dataNode, String attrName ) {
+		Node attr = dataNode.getAttributes().getNamedItem( attrName);
+		Tuple2d tuple = null;
+		if ( attr != null ) {
+			Scanner s = new Scanner( attr.getNodeValue() );
+			tuple = new Vector2d( s.nextDouble(), s.nextDouble());
 			s.close();
 		}
 		return tuple;

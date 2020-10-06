@@ -7,12 +7,12 @@ import mintools.parameters.DoubleParameter;
 
 public class SphericalJoint extends GraphNode {
     private DoubleParameter rx,ry,rz;
-    private Double tx,ty,tz;
-    public SphericalJoint(String name, Double tx, Double ty, Double tz) {
+    private Double tx,ty,tz,rxmin,rymin,rzmin,rxmax,rymax,rzmax;
+    public SphericalJoint(String name, Double tx, Double ty, Double tz, Double rxmin, Double rxmax, Double rymin, Double rymax, Double rzmin, Double rzmax) {
         super(name);
-        dofs.add(rx = new DoubleParameter("x", 0, -180, 180));
-        dofs.add(ry = new DoubleParameter("y", 0, -180, 180));
-        dofs.add(rz = new DoubleParameter("z", 0, -180, 180));
+        dofs.add(rx = new DoubleParameter("x", (rxmin+rxmax)/2, rxmin, rxmax));
+        dofs.add(ry = new DoubleParameter("y", (rymin+rymax)/2, rymin, rymax));
+        dofs.add(rz = new DoubleParameter("z", (rzmin+rzmax)/2, rzmin, rzmax));
         this.tx = tx;
         this.ty = ty;
         this.tz = tz;

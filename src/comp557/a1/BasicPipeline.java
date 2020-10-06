@@ -34,12 +34,17 @@ public class BasicPipeline {
     /** TODO: Objective 7: material properties, minimally kd is set up, but add more as necessary */
     /** You will want to use this with a glUniform3f call to set the r g b reflectance properties, each being between 0 and 1 */
     public int kdID;
-    public int fieldLightDirID;
+    public int ksID;
+    public int shininessID;
+    public int fillLightDirID;
     public int keyLightDirID;
     public int backLightDirID;
+    public int fillLightIntensityID;
+    public int keyLightIntensityID;
+    public int backLightIntensityID;
+    public int viewDirID;
     
     /** TODO: Objective 8: lighting direction, minimally one direction is setup , but add more as necessary */
-    public int lightDirID;
 
     public int positionAttributeID;
     public int normalAttributeID;
@@ -75,14 +80,18 @@ public class BasicPipeline {
         VMatrixID = gl.glGetUniformLocation( glslProgramID, "V" );
         PMatrixID = gl.glGetUniformLocation( glslProgramID, "P" );
         kdID = gl.glGetUniformLocation( glslProgramID, "kd" );
-        lightDirID = gl.glGetUniformLocation( glslProgramID, "lightDir" );
+		ksID = gl.glGetUniformLocation(glslProgramID, "ks");
+		shininessID = gl.glGetUniformLocation(glslProgramID, "shininess");
         // Three light
-		fieldLightDirID = gl.glGetUniformLocation(glslProgramID, "fieldLightDir");
+		fillLightDirID = gl.glGetUniformLocation(glslProgramID, "fillLightDir");
 		backLightDirID = gl.glGetUniformLocation(glslProgramID, "backLightDir");
 		keyLightDirID = gl.glGetUniformLocation(glslProgramID, "keyLightDir");
-		// End
+		fillLightIntensityID = gl.glGetUniformLocation(glslProgramID, "fillLightIntensity");
+		backLightIntensityID = gl.glGetUniformLocation(glslProgramID, "backLightIntensity");
+		keyLightIntensityID = gl.glGetUniformLocation(glslProgramID, "keyLightIntensity");
         positionAttributeID = gl.glGetAttribLocation( glslProgramID, "position" );
         normalAttributeID = gl.glGetAttribLocation( glslProgramID, "normal" );
+		viewDirID = gl.glGetAttribLocation( glslProgramID, "viewDir" );
 	}
 	
 	/**
@@ -102,16 +111,35 @@ public class BasicPipeline {
 
         // TODO: Objective 7: GLSL lighting, you may want to provide 
         Vector3f lightDir = new Vector3f(0.5f, 0.1f, 0.866f);
+        Vector3f fillLightIntensity = new Vector3f(0.6f, 0.6f, 0.6f);
+		Vector3f keyLightIntensity = new Vector3f(1.0f, 1.0f, 1.0f);
+		Vector3f backLightIntensity = new Vector3f(0.4f, 0.4f, 0.4f);
+		Vector3f viewDir = new Vector3f(1.0f, 1.0f, 1.0f);
+		viewDir.normalize();
+		gl.glUniform3f(viewDirID, viewDir.x, viewDir.y, viewDir.z);
         lightDir.normalize();
-        gl.glUniform3f(fieldLightDirID, lightDir.x, lightDir.y, lightDir.z);
+		gl.glUniform3f(kdID, 0, 0, 0);
+		gl.glUniform3f(ksID, 0.9f, 0.9f, 0.9f);
+		gl.glUniform1f(shininessID, 1);
+        gl.glUniform3f(fillLightDirID, lightDir.x, lightDir.y, lightDir.z);
+        gl.glUniform3f(fillLightIntensityID, fillLightIntensity.x, fillLightIntensity.y, fillLightIntensity.z);
         lightDir = new Vector3f(-0.5f, 0.1f, 0.866f);
         lightDir.normalize();
         gl.glUniform3f(keyLightDirID, lightDir.x, lightDir.y, lightDir.z);
+        gl.glUniform3f(keyLightIntensityID, keyLightIntensity.x, keyLightIntensity.y, keyLightIntensity.z);
         lightDir = new Vector3f(0.5f, 0.1f, -0.866f);
 		lightDir.normalize();
 		gl.glUniform3f(backLightDirID, lightDir.x, lightDir.y, lightDir.z);
+		gl.glUniform3f(backLightIntensityID, backLightIntensity.x, backLightIntensity.y, backLightIntensity.z);
 	}
-	
+
+	public void setGlKd( GL4 gl, float r, float g, float b) {
+		gl.glUniform3f(kdID, r, g, b);
+	}
+
+	public void setGlShininess( GL4 gl, float s ) {
+		gl.glUniform1f(shininessID, s);
+	}
 	/** Sets the modeling matrix with the current top of the stack */
 	public void setModelingMatrixUniform( GL4 gl ) {
 		// TODO: Objective 1: make sure you send the top of the stack modeling and inverse transpose matrices to GLSL

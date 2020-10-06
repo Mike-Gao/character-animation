@@ -6,21 +6,12 @@ import mintools.parameters.DoubleParameter;
 public class RotaryJoint extends GraphNode {
     Double rx, ry, rz, tx, ty, tz;
     DoubleParameter angle;
-    public RotaryJoint(String name, Double x, Double y, Double z, Double tx, Double ty, Double tz) {
+    public RotaryJoint(String name, Double tx, Double ty, Double tz, Double rx, Double ry, Double rz, Double angMin, Double angMax) {
         super(name);
-        dofs.add(angle = new DoubleParameter("angle", 0, -180, 180));
-        this.rx = x;
-        this.ry = y;
-        this.rz = z;
-        if (x == null) {
-            this.rx = 0.0;
-        }
-        if (y == null) {
-            this.ry = 0.0;
-        }
-        if (z == null) {
-            this.rz = 1.0;
-        }
+        dofs.add(angle = new DoubleParameter("angle", (angMin+angMax)/2, angMin, angMax));
+        this.rx = rx;
+        this.ry = ry;
+        this.rz = rz;
         this.tx = tx;
         this.ty = ty;
         this.tz = tz;

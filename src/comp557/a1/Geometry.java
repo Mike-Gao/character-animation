@@ -14,6 +14,7 @@ public class Geometry extends GraphNode {
     Vector3d position, rotation, scaling;
     Vector3f color;
     String type;
+    float shininess = 1f;
     public Geometry(String name, String type, Vector3d position, Vector3d rotation, Vector3d scaling, Vector3f color) {
         super(name);
         this.position = position;
@@ -34,7 +35,8 @@ public class Geometry extends GraphNode {
     public void display(GLAutoDrawable drawable, BasicPipeline pipeline ) {
         pipeline.push();
         GL4 gl = drawable.getGL().getGL4();
-        gl.glUniform3f(pipeline.kdID, this.color.x, this.color.y, this.color.z);
+        pipeline.setGlKd(gl, (float) color.x, (float) color.y, (float) color.z);
+        pipeline.setGlShininess(gl, shininess);
         // TODO: Objective 3: Freejoint, transformations must be applied before drawing children
         if (type.equals("box")) {
             Cube.draw(drawable, pipeline);
