@@ -12,7 +12,7 @@ public class CharacterMaker {
 	
 	// TODO: Objective 8: change default of load from file to true once you start working with xml
 	static BooleanParameter loadFromFile = new BooleanParameter( "Load from file (otherwise by procedure)", false );
-	static JTextField baseFileName = new JTextField("data/a1data/character");
+	static JTextField baseFileName = new JTextField("data/character");
 	
 	/**
 	 * Creates a character, either procedurally, or by loading from an xml file

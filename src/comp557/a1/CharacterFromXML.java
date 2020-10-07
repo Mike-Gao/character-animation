@@ -15,7 +15,6 @@ import org.w3c.dom.NodeList;
 
 /**
  * Loads an articulated character hierarchy from an XML file.
- * /home/gao/IdeaProjects/character-animation/data/a1data/character
  */
 public class CharacterFromXML {
 
